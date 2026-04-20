@@ -13,12 +13,29 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ['Montserrat', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      backgroundImage: {
+        'gradient-pink': 'var(--gradient-pink)',
+      },
+      boxShadow: {
+        'card-pink': 'var(--shadow-card)',
+        'yellow-glow': 'var(--shadow-yellow)',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        brand: {
+          pink: "hsl(var(--brand-pink))",
+          "pink-dark": "hsl(var(--brand-pink-dark))",
+          yellow: "hsl(var(--brand-yellow))",
+          dark: "hsl(var(--brand-dark))",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
