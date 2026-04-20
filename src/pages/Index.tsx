@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Calendar, MapPin, Check, Bot, Monitor, Languages, Sparkles } from "lucide-react";
 import heroFood from "@/assets/hero-food.jpg";
+import naturalBotLogo from "@/assets/natural-bot-logo.png";
 
 const formSchema = z.object({
   nome: z.string().trim().min(2, "Informe seu nome").max(100),
@@ -56,10 +57,11 @@ const Index = () => {
       {/* Header */}
       <header className="w-full py-6 bg-white border-b border-border">
         <div className="container flex justify-center">
-          <div className="text-2xl font-display font-extrabold tracking-tight">
-            <span className="text-brand-pink">Natural</span>
-            <span className="text-brand-dark">Bot</span>
-          </div>
+          <img
+            src={naturalBotLogo}
+            alt="Natural Bot — Copiloto de Vendas com IA"
+            className="h-12 md:h-14 w-auto"
+          />
         </div>
       </header>
 
