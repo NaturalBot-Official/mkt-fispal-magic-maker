@@ -37,7 +37,9 @@ const Index = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const WEBHOOK = "https://n8n.fenil.com.br/webhook/eebdff12-4ff7-49d5-a866-68079d1488d4";
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = formSchema.safeParse(form);
     if (!result.success) {
@@ -45,11 +47,23 @@ const Index = () => {
       return;
     }
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const params = new URLSearchParams();
+      params.append("nome", form.nome);
+      params.append("email", form.email);
+      params.append("celular", form.celular);
+      params.append("delivery", form.delivery);
+      params.append("empresa", form.empresa);
+      params.append("segmento", form.segmento);
+      params.append("origem", "fispal-magic");
+      await fetch(`${WEBHOOK}?${params.toString()}`, { method: "GET", mode: "no-cors" });
+    } catch {
+      // silencia erro de rede — no-cors não retorna resposta
+    } finally {
       setLoading(false);
       toast.success("Pronto! Em instantes você receberá seu CÓDIGO VIP por e-mail.");
       setForm({ nome: "", email: "", celular: "", delivery: "", empresa: "", segmento: "" });
-    }, 800);
+    }
   };
 
   return (
