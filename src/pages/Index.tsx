@@ -37,7 +37,10 @@ const Index = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const WEBHOOK_URL =
+    "https://backend.fenil.com.br/webhook-forms/receive/a515386f803594db9d3259214f2724e045facc40fcb0c9ba49e7c2fa8c6539d5";
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = formSchema.safeParse(form);
     if (!result.success) {
@@ -45,11 +48,27 @@ const Index = () => {
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Pronto! Em instantes você receberá seu CÓDIGO VIP por e-mail.");
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome: form.nome,
+          email: form.email,
+          // Garante número completo com DDI 55 para o WhatsApp
+          celular: "55" + form.celular.replace(/\D/g, ""),
+          delivery: form.delivery,
+          empresa: form.empresa,
+          segmento: form.segmento,
+        }),
+      });
+      toast.success("Pronto! Em instantes você receberá seu CÓDIGO VIP por WhatsApp.");
       setForm({ nome: "", email: "", celular: "", delivery: "", empresa: "", segmento: "" });
-    }, 800);
+    } catch {
+      toast.error("Ops! Erro ao enviar. Verifique sua conexão e tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
