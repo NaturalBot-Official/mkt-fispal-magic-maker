@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Calendar, MapPin, Check, Bot, Monitor, Languages, Sparkles } from "lucide-react";
+import { Calendar, MapPin, Check, Bot, Monitor, Languages, Sparkles, CheckCircle2 } from "lucide-react";
 import heroFood from "@/assets/hero-food.jpg";
 import naturalBotLogo from "@/assets/natural-bot-logo.png";
 
@@ -36,6 +36,7 @@ const Index = () => {
     segmento: "",
   });
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const WEBHOOK_URL =
     "https://backend.fenil.com.br/webhook-forms/receive/a515386f803594db9d3259214f2724e045facc40fcb0c9ba49e7c2fa8c6539d5";
@@ -63,7 +64,7 @@ const Index = () => {
         }),
       });
       toast.success("Pronto! Em instantes você receberá seu CÓDIGO VIP por WhatsApp.");
-      setForm({ nome: "", email: "", celular: "", delivery: "", empresa: "", segmento: "" });
+      setSubmitted(true);
     } catch {
       toast.error("Ops! Erro ao enviar. Verifique sua conexão e tente novamente.");
     } finally {
@@ -164,6 +165,18 @@ const Index = () => {
             {/* Right column: form */}
             <div className="lg:sticky lg:top-8">
               <div className="bg-gradient-pink rounded-2xl p-6 md:p-8 shadow-card-pink">
+                {submitted ? (
+                  <div className="rounded-2xl bg-white p-10 text-center">
+                    <CheckCircle2 className="mx-auto mb-4 size-14 text-brand-pink" />
+                    <h3 className="mb-2 font-display text-2xl font-extrabold text-brand-dark">
+                      Pronto!
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Em instantes você receberá seu <strong>CÓDIGO VIP</strong> por WhatsApp.
+                    </p>
+                  </div>
+                ) : (
+                <>
                 <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white text-center mb-6 leading-tight">
                   Preencha o formulário para receber o CÓDIGO VIP
                 </h2>
@@ -257,6 +270,8 @@ const Index = () => {
                     {loading ? "Enviando..." : "Receber Código VIP"}
                   </button>
                 </form>
+                </>
+                )}
               </div>
             </div>
           </div>
