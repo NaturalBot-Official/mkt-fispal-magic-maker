@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Calendar, MapPin, Check, Bot, Monitor, Languages, Sparkles, CheckCircle2 } from "lucide-react";
+import { Calendar, MapPin, Check, Bot, Monitor, Languages, Sparkles } from "lucide-react";
 import heroFood from "@/assets/hero-food.jpg";
 import naturalBotLogo from "@/assets/natural-bot-logo.png";
 
@@ -36,10 +37,12 @@ const Index = () => {
     segmento: "",
   });
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const WEBHOOK_URL =
     "https://backend.fenil.com.br/webhook-forms/receive/a515386f803594db9d3259214f2724e045facc40fcb0c9ba49e7c2fa8c6539d5";
+  const N8N_WEBHOOK_URL =
+    "https://n8n.fenil.com.br/webhook/a76baf2b-49d2-47c1-889d-f8f718affae3";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,21 +53,18 @@ const Index = () => {
     }
     setLoading(true);
     try {
-      await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nome: form.nome,
-          email: form.email,
-          // Garante número completo com DDI 55 para o WhatsApp
-          celular: "55" + form.celular.replace(/\D/g, ""),
-          delivery: form.delivery,
-          empresa: form.empresa,
-          segmento: form.segmento,
-        }),
+      const payload = JSON.stringify({
+        nome: form.nome,
+        email: form.email,
+        // Garante número completo com DDI 55 para o WhatsApp
+        celular: "55" + form.celular.replace(/\D/g, ""),
+        delivery: form.delivery,
+        empresa: form.empresa,
+        segmento: form.segmento,
       });
-      toast.success("Pronto! Em instantes você receberá seu CÓDIGO VIP por WhatsApp.");
-      setSubmitted(true);
+      await fetch(WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: payload });
+      fetch(N8N_WEBHOOK_URL, { method: "POST", mode: "no-cors", body: payload }).catch((err) => console.error("[n8n]", err));
+      navigate("/obrigado");
     } catch {
       toast.error("Ops! Erro ao enviar. Verifique sua conexão e tente novamente.");
     } finally {
@@ -165,18 +165,6 @@ const Index = () => {
             {/* Right column: form */}
             <div className="lg:sticky lg:top-8">
               <div className="bg-gradient-pink rounded-2xl p-6 md:p-8 shadow-card-pink">
-                {submitted ? (
-                  <div className="rounded-2xl bg-white p-10 text-center">
-                    <CheckCircle2 className="mx-auto mb-4 size-14 text-brand-pink" />
-                    <h3 className="mb-2 font-display text-2xl font-extrabold text-brand-dark">
-                      Pronto!
-                    </h3>
-                    <p className="text-muted-foreground">
-                      Em instantes você receberá seu <strong>CÓDIGO VIP</strong> por WhatsApp.
-                    </p>
-                  </div>
-                ) : (
-                <>
                 <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white text-center mb-6 leading-tight">
                   Preencha o formulário para receber o CÓDIGO VIP
                 </h2>
@@ -270,8 +258,6 @@ const Index = () => {
                     {loading ? "Enviando..." : "Receber Código VIP"}
                   </button>
                 </form>
-                </>
-                )}
               </div>
             </div>
           </div>
