@@ -73,7 +73,7 @@ const Index = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background overflow-x-hidden">
       {/* Header */}
       <header className="w-full py-6 bg-white border-b border-border">
         <div className="container flex justify-center">
@@ -97,15 +97,15 @@ const Index = () => {
         <div className="relative container py-12 lg:py-20">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
             {/* Left column */}
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-pink/10 border border-brand-pink/20">
-                <Sparkles className="w-4 h-4 text-brand-pink" />
-                <span className="text-sm font-semibold text-brand-pink uppercase tracking-wide">
+            <div className="space-y-6 min-w-0">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-pink/10 border border-brand-pink/20 max-w-full">
+                <Sparkles className="w-4 h-4 text-brand-pink flex-shrink-0" />
+                <span className="text-sm font-semibold text-brand-pink uppercase tracking-wide break-words">
                   Fispal Food Service 2026
                 </span>
               </div>
 
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-brand-dark">
+              <h1 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight text-brand-dark">
                 Garanta seu{" "}
                 <span className="text-brand-pink">INGRESSO GRATUITO</span> para a Fispal Food Service 2026!
               </h1>
@@ -163,7 +163,7 @@ const Index = () => {
             </div>
 
             {/* Right column: form */}
-            <div className="lg:sticky lg:top-8">
+            <div className="lg:sticky lg:top-8 min-w-0">
               <div className="bg-gradient-pink rounded-2xl p-6 md:p-8 shadow-card-pink">
                 <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white text-center mb-6 leading-tight">
                   Preencha o formulário para receber o CÓDIGO VIP
